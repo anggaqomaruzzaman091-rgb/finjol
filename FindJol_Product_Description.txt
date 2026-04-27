@@ -1,0 +1,29 @@
+======================================================
+FINDJOL: PRODUCT & SERVICE DESCRIPTION
+======================================================
+
+PRODUCT OVERVIEW
+FindJol is an advanced, offline-first cybersecurity web platform designed to assist and protect individuals whose identities have been compromised by predatory online loan platforms (Pinjol Ilegal). 
+
+When innocent job seekers or citizens have their KTP (Identity Card) data stolen, they frequently face employment rejections due to sudden negative BI-Checking/SLIK records. The traditional bureaucratic process of clearing one's name with the Otoritas Jasa Keuangan (OJK) requires immense, rigid legal formatting that most citizens do not understand. FindJol completely automates this process from start to finish.
+
+
+CORE FEATURES
+1. Automated OJK Dispute Generator
+Users answer a simple 3-step digital wizard detailing the chronology of their identity theft. FindJol takes this raw data and instantly compiles it into a Print-Ready, heavily formatted Formal Legal Complaint template perfectly adhering to standard Indonesian bureaucratic guidelines.
+
+2. Secure Local AI Identity Scanning (Zero-Trust)
+Identity documents are highly sensitive. Unlike other platforms that transmit photos to cloud servers (like AWS or Google), FindJol uses a completely offline PyTorch and OpenCV Optical Character Recognition (OCR) engine. The user's camera scans their KTP, and the local AI isolates and extracts the NIK, Full Name, Gender, and Address locally, ensuring absolute Gov-Tech level data privacy.
+
+3. Cyber-Themed, Accessible UI
+The platform integrates a premium dual-tier (Light/Dark mode) interface designed to lower user anxiety during stressful fraud situations, featuring clear navigation and robust guidance templates.
+
+
+TARGET DEMOGRAPHIC
+- Victims of Identity Theft: Individuals trying to legally detach themselves from fraudulent loans they never took.
+- Job Seekers: Professionals trying to quickly secure formal OJK takedown documents to clean their financial records for background checks.
+- Legal Advocates: Pro-bono legal teams and NGOs who need to mass-generate formal takedown requests efficiently.
+
+
+VALUE PROPOSITION
+FindJol transforms victims into organized plaintiffs in under 3 minutes. By merging Zero-Trust biometric scanning with automated legal formatting, FindJol democratizes access to financial justice.

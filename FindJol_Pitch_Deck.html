@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>FindJol - Pitch Deck</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #eef2f5;
+        }
+
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            background: white;
+            padding: 60px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            page-break-after: always;
+        }
+
+        .slide-center {
+            align-items: center;
+            text-align: center;
+        }
+
+        h1 {
+            color: #002244;
+            font-size: 56px;
+            margin: 0 0 20px 0;
+        }
+
+        h2 {
+            color: #00a8e8;
+            font-size: 42px;
+            margin: 0 0 30px 0;
+        }
+
+        p,
+        li {
+            font-size: 28px;
+            line-height: 1.5;
+            color: #444;
+        }
+
+        .split {
+            display: flex;
+            width: 100%;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .split-half {
+            flex: 1;
+        }
+
+        .screenshot {
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        /* 16:9 Print Format */
+        @media print {
+            @page {
+                size: landscape;
+                margin: 0;
+            }
+
+            body {
+                margin: 0;
+                padding: 0;
+                -webkit-print-color-adjust: exact;
+            }
+
+            .slide {
+                width: 297mm;
+                height: 210mm;
+                /* A4 Landscape */
+                padding: 40px;
+                page-break-after: always;
+                border: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Slide 1 -->
+    <div class="slide slide-center" style="background: linear-gradient(135deg, #001222 0%, #004488 100%);">
+        <h1 style="color: white; font-size: 80px;">FindJol</h1>
+        <h2 style="color: #00e5ff;">Reclaiming Stolen Identities. Automating Justice.</h2>
+        <p style="color: #ccc;">Investor Pitch Deck 2026</p>
+    </div>
+
+    <!-- Slide 2 -->
+    <div class="slide">
+        <h2>The Problem: A Silent Epidemic</h2>
+        <div class="split">
+            <div class="split-half">
+                <ul>
+                    <li>Predatory "Pinjol" (Online Loans) routinely steal civilian KTP data.</li>
+                    <li>Victims discover the fraud only when they are <strong>rejected for employment</strong> due to
+                        negative BI-Checking (SLIK).</li>
+                    <li>The formal Otoritas Jasa Keuangan (OJK) clearing process requires immense legal formatting that
+                        standard citizens don't understand.</li>
+                </ul>
+            </div>
+            <div class="split-half">
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <div style="width: 100%; height: 160px; background: url('./Screenshot_Home.png'); background-size: 100% auto; background-position: top; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.15);"></div>
+                    <div style="width: 100%; height: 160px; background: url('./Screenshot_Home.png'); background-size: 100% auto; background-position: center; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.15);"></div>
+                    <div style="width: 100%; height: 160px; background: url('./Screenshot_Home.png'); background-size: 100% auto; background-position: bottom; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.15);"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3 -->
+    <div class="slide">
+        <h2>The Solution: FindJol</h2>
+        <p>A zero-trust web platform that transforms victims into organized plaintiffs in under 3 minutes.</p>
+        <div class="split">
+            <div class="split-half">
+                <img src="./Screenshot_Dispute.png" class="screenshot" alt="Dispute UI">
+            </div>
+            <div class="split-half">
+                <ul>
+                    <li><strong>Step 1:</strong> User runs our guided 'Dispute Generator' wizard.</li>
+                    <li><strong>Step 2:</strong> Platform captures the KTP logic flawlessly offline via PyTorch OCR.
+                    </li>
+                    <li><strong>Step 3:</strong> Platform injects variables into a legally-binding, print-ready OJK
+                        submission template automatically.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4 -->
+    <div class="slide slide-center">
+        <h2>Secure Local AI Architecture</h2>
+        <p>Unlike competitors that expose sensitive ID cards to AWS/Google Cloud...</p>
+        <div
+            style="background: #f0f8ff; border: 4px solid #00a8e8; padding: 40px; border-radius: 20px; margin-top: 30px;">
+            <p style="font-size: 32px; font-weight: bold; margin:0;">FindJol parses highly sensitive KTP documents
+                entirely offline.</p>
+            <p style="font-size: 24px; color: #666;">We use Headless OpenCV and PyTorch local instances, establishing
+                immediate physical trust and Gov-Tech level data privacy.</p>
+        </div>
+    </div>
+
+</body>
+
+</html>

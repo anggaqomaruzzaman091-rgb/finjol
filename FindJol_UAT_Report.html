@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>User Acceptance Testing (UAT) Report - FindJol</title>
+    <style>
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #002244;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #00a8e8;
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .header p {
+            color: #666;
+            margin-top: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #002244;
+            color: white;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .pass-box {
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            border: 1px solid #333;
+        }
+
+        .sign-off {
+            margin-top: 80px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .sign-box {
+            width: 45%;
+        }
+
+        .sign-line {
+            border-bottom: 1px solid #333;
+            margin-top: 50px;
+            margin-bottom: 10px;
+        }
+
+        /* Print formatting */
+        @media print {
+            body {
+                padding: 0;
+                max-width: 100%;
+            }
+
+            @page {
+                margin: 1.5cm;
+            }
+
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>FindJol Platform - User Acceptance Testing (UAT)</h1>
+        <p>Official Verification & Release Candidate Report</p>
+        <p><strong>Date:</strong> ________________ &nbsp;&nbsp;&nbsp; <strong>Tester Name:</strong> ________________</p>
+    </div>
+
+    <h2>1. System Overview</h2>
+    <p>This document details the functional testing scenarios for the <strong>FindJol</strong> application, focusing on
+        the User Interface, Secure Camera-Native OCR processing (OpenCV/PyTorch), and the automated generation of the
+        OJK Fraud Complaint templates.</p>
+
+    <h2>2. Test Cases Overview</h2>
+
+    <h3>Test Suite A: Core Layout & Navigation</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Test Scenario</th>
+                <th>Action Steps</th>
+                <th>Expected Result</th>
+                <th>Status (Pass/Fail)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>TC-A1</td>
+                <td>Theme Toggling</td>
+                <td>1. Click the sun/moon icon in navbar.<br>2. Observe background and text colors.</td>
+                <td>Global CSS transitions cleanly from Dark to Light UI modes.</td>
+                <td>[__] Pass &nbsp; [__] Fail</td>
+            </tr>
+            <tr>
+                <td>TC-A2</td>
+                <td>Dynamic Logo Rendering</td>
+                <td>1. Refresh page.<br>2. Check top left header and bottom footer.</td>
+                <td>New scaled proprietary logo renders massively and overrides internal margins.</td>
+                <td>[__] Pass &nbsp; [__] Fail</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Test Suite B: Automated Dispute Generator Wizard</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Test Scenario</th>
+                <th>Action Steps</th>
+                <th>Expected Result</th>
+                <th>Status (Pass/Fail)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>TC-B1</td>
+                <td>Data Validation (Step 1)</td>
+                <td>1. Leave 'Platform Name' blank.<br>2. Attempt to click Next.</td>
+                <td>System blocks progression; alerts missing fields.</td>
+                <td>[__] Pass &nbsp; [__] Fail</td>
+            </tr>
+            <tr>
+                <td>TC-B2</td>
+                <td>Chronology Length (Step 2)</td>
+                <td>1. Paste less than 15 characters into Chronology.<br>2. Click Next.</td>
+                <td>System triggers validation error indicating insufficient characters.</td>
+                <td>[__] Pass &nbsp; [__] Fail</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="page-break"></div>
+
+    <h3>Test Suite C: Local OCR Scanning Pipeline</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Test Scenario</th>
+                <th>Action Steps</th>
+                <th>Expected Result</th>
+                <th>Status (Pass/Fail)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>TC-C1</td>
+                <td>Camera Permission</td>
+                <td>1. Reach Step 3.<br>2. Click 'Open Camera'.</td>
+                <td>Browser explicitly requests secure camera permissions.</td>
+                <td>[__] Pass &nbsp; [__] Fail</td>
+            </tr>
+            <tr>
+                <td>TC-C2</td>
+                <td>EasyOCR KTP Recognition</td>
+                <td>1. Hold standard KTP template flat.<br>2. Ensure adequate lighting.<br>3. Click 'Scan Snapshot'.
+                </td>
+                <td>AI model resolves backend processing within ~4 seconds.</td>
+                <td>[__] Pass &nbsp; [__] Fail</td>
+            </tr>
+            <tr>
+                <td>TC-C3</td>
+                <td>Auto-Fill Form Data Mapping</td>
+                <td>1. Observe React inputs post-scan.</td>
+                <td>`NIK`, `Full Name`, `Jenis Kelamin`, and `Alamat` instantly append into form state correctly.</td>
+                <td>[__] Pass &nbsp; [__] Fail</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Test Suite D: Generation & Formal Output</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Test Scenario</th>
+                <th>Action Steps</th>
+                <th>Expected Result</th>
+                <th>Status (Pass/Fail)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>TC-D1</td>
+                <td>Virtual Template Injection</td>
+                <td>1. Validate generated certificate visually.</td>
+                <td>Dynamic variables (Name, NIK, Chronology, Platform) fit seamlessly within the OJK text.</td>
+                <td>[__] Pass &nbsp; [__] Fail</td>
+            </tr>
+            <tr>
+                <td>TC-D2</td>
+                <td>Print-Boundaries (Save as PDF)</td>
+                <td>1. Click 'Cetak / Simpan PDF'.<br>2. Analyze preview.</td>
+                <td>Web layout (buttons/navbars) vanishes. Strict single-page A4 MS Word representation is forced.</td>
+                <td>[__] Pass &nbsp; [__] Fail</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="sign-off page-break">
+        <div class="sign-box">
+            <p><strong>Tester / QA Analyst</strong></p>
+            <div class="sign-line"></div>
+            <p>Name: </p>
+            <p>Date: </p>
+        </div>
+
+        <div class="sign-box">
+            <p><strong>Project Manager / Lead Dev</strong></p>
+            <div class="sign-line"></div>
+            <p>Name: </p>
+            <p>Date: </p>
+        </div>
+    </div>
+
+</body>
+
+</html>

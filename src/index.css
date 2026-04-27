@@ -1,0 +1,116 @@
+:root {
+  /* Backgrounds */
+  --bg-dark:   oklch(0.075 0.015 250);
+  --bg-darker: oklch(0.055 0.010 250);
+
+  /* Text */
+  --text-main:  oklch(0.97 0.005 240);
+  --text-muted: oklch(0.62 0.025 240);
+
+  /* Accents */
+  --accent-cyan:   #22d3ee;
+  --accent-green:  #4ade80;
+  --accent-violet: #a78bfa;
+  --accent-amber:  #fbbf24;
+  --accent-red:    #f87171;
+
+  /* Surfaces */
+  --border-color:  rgba(255, 255, 255, 0.12);
+  --glass-bg:      rgba(10, 20, 40, 0.65);
+  --glass-border:  rgba(255, 255, 255, 0.10);
+  --bg-card:       rgba(20, 32, 56, 0.55);
+  --input-bg:      rgba(8, 16, 32, 0.55);
+
+  /* Typography */
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+[data-theme='light'] {
+  --bg-dark: #F8FAFC;
+  --bg-darker: #F1F5F9;
+  --text-main: #0F172A;
+  --text-muted: #64748B;
+  --accent-cyan: #0284c7;
+  --accent-green: #16a34a;
+  --border-color: rgba(15, 23, 42, 0.15);
+  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-border: rgba(15, 23, 42, 0.15);
+  --bg-card: rgba(241, 245, 249, 0.8);
+  --input-bg: rgba(255, 255, 255, 0.9);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+input,
+textarea,
+button,
+.glass-panel,
+.architecture-box,
+.stepper>div>div {
+  transition: background-color 0.5s ease, border-color 0.5s ease, color 0.5s ease, box-shadow 0.3s ease, transform 0.3s ease !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  line-height: 1.2;
+}
+
+a {
+  color: var(--text-main);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--accent-cyan);
+}
+
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+}
+
+.gradient-text {
+  color: var(--accent-cyan);
+  font-weight: 800;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}

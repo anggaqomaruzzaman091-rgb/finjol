@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>FindJol - Product Description</title>
+    <style>
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+
+        h1 {
+            color: #002244;
+            font-size: 32px;
+            border-bottom: 2px solid #00a8e8;
+            padding-bottom: 15px;
+        }
+
+        h2 {
+            color: #004488;
+            margin-top: 40px;
+        }
+
+        .hero-img {
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+        }
+
+        .feature-box {
+            background: #f4f9ff;
+            padding: 20px;
+            border-left: 5px solid #00a8e8;
+            margin: 20px 0;
+        }
+
+        @media print {
+            body {
+                padding: 0;
+                max-width: 100%;
+                font-size: 11pt;
+            }
+
+            @page {
+                margin: 1cm;
+            }
+
+            .hero-img {
+                max-height: 350px;
+                /* Constrain image height so it fits on Page 1 */
+                width: auto;
+                max-width: 100%;
+                margin: 15px auto;
+                display: block;
+                page-break-inside: avoid;
+            }
+
+            .feature-box {
+                page-break-inside: avoid;
+            }
+
+            h1,
+            h2,
+            h3 {
+                page-break-after: avoid;
+                margin-top: 15px;
+            }
+
+            p,
+            ul,
+            li {
+                page-break-before: avoid;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>FindJol: Secure Identity & Fraud Resolution Platform</h1>
+    <p><strong>Version:</strong> 1.0 (Release Candidate)<br><strong>Classification:</strong> Enterprise Cybersecurity &
+        Gov-Tech</p>
+
+    <!-- Screenshot of the Landing Page (Divided into 3 blocks) -->
+    <div style="display: flex; flex-direction: column; gap: 15px; margin: 20px 0;">
+        <div
+            style="width: 100%; height: 250px; background: url('./Screenshot_Home.png'); background-size: 100% auto; background-position: top; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+        </div>
+        <div
+            style="width: 100%; height: 250px; background: url('./Screenshot_Home.png'); background-size: 100% auto; background-position: center; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); page-break-inside: avoid;">
+        </div>
+        <div
+            style="width: 100%; height: 250px; background: url('./Screenshot_Home.png'); background-size: 100% auto; background-position: bottom; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); page-break-inside: avoid;">
+        </div>
+    </div>
+
+    <h2>1. Executive Summary</h2>
+    <p><strong>FindJol</strong> is an advanced, offline-first web platform engineered to protect and assist individuals
+        whose identities have been compromised by predatory or fraudulent online loan companies (Pinjol Ilegal). When a
+        job seeker is blacklisted due to identity theft, the bureaucratic process of clearing their name with the
+        Otoritas Jasa Keuangan (OJK) is traditionally slow and complex. FindJol entirely automates this pipeline.</p>
+
+    <h2>2. Core Target Demographic</h2>
+    <ul>
+        <li><strong>Victims of Identity Theft:</strong> Individuals whose KTP data was stolen and used to secure
+            fraudulent loans.</li>
+        <li><strong>Job Seekers:</strong> Professionals actively tracking down negative BI-Checking/SLIK records.</li>
+        <li><strong>Legal Advocates:</strong> NGOs or legal aides needing rapid formal complaint generation tools.</li>
+    </ul>
+
+    <h2>3. Application Architecture & Features</h2>
+
+    <div class="feature-box">
+        <h3>Feature: Automated OJK Certificate Generation</h3>
+        <p>Instead of manually drafting formal legal letters, users simply answer a 3-step digital wizard. FindJol
+            captures the chronology of the fraud and instantly binds it to a <strong>Print-Ready, Formal OJK Complaint
+                Template</strong>. The layout strictly adheres to standard Indonesian bureaucratic guidelines.</p>
+    </div>
+
+    <!-- Screenshot of the Dispute Generator -->
+    <img src="./Screenshot_Dispute.png" alt="FindJol Dispute Generator" class="hero-img" />
+
+    <div class="feature-box">
+        <h3>Feature: Local PyTorch AI Document Scanning (Zero-Trust)</h3>
+        <p>FindJol includes an enterprise-grade Identity Scanner. Rather than sending highly sensitive KTP photos to
+            external servers (AWS/Google), the backend utilizes local <strong>EasyOCR / OpenCV</strong> models to
+            execute localized Optical Character Recognition. It actively extracts <em>NIK, Name, Gender, and
+                Address</em> and instantly auto-fills the frontend securely.</p>
+    </div>
+
+    <h2>4. Technical Stack</h2>
+    <ul>
+        <li><strong>Frontend:</strong> React + TypeScript, Vite, Vanilla CSS.</li>
+        <li><strong>Backend:</strong> Python FastAPI, Uvicorn, EasyOCR (PyTorch), OpenCV-Headless.</li>
+        <li><strong>Security:</strong> AES-256 Mock Encryption, JWT Architecture, Offline-Capable scanning.</li>
+    </ul>
+
+</body>
+
+</html>
