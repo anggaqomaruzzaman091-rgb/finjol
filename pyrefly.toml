@@ -1,0 +1,14 @@
+# Pyrefly config — point at the backend venv so imports like `dotenv`,
+# `fastapi`, `slowapi`, `easyocr`, etc. resolve. Without this, Pyrefly
+# queries the system Python 3.11 in WindowsApps which has none of them.
+
+project-includes = ["backend/**/*.py"]
+project-excludes = [
+    "**/venv/**",
+    "**/__pycache__/**",
+    "**/node_modules/**",
+    "dist/**",
+]
+
+python-interpreter = "backend/venv/Scripts/python.exe"
+search-path = ["backend"]

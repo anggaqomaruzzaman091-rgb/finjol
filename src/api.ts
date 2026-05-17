@@ -74,7 +74,45 @@ export async function fetchWithAuth(url: string, options: RequestInit = {}): Pro
   return res;
 }
 
-export async function scanIdentityDocument(file: File): Promise<Record<string, string>> {
+export interface YoloDetection {
+  class: string;
+  field: string;
+  bbox: [number, number, number, number];
+  confidence: number;
+}
+
+export interface ScanResponse {
+  document_type: string;
+  nik?: string;
+  full_name?: string;
+  tempat_lahir?: string;
+  date_of_birth?: string;
+  jenis_kelamin?: string;
+  gol_darah?: string;
+  alamat?: string;
+  rt_rw?: string;
+  kelurahan?: string;
+  kecamatan?: string;
+  agama?: string;
+  status_perkawinan?: string;
+  pekerjaan?: string;
+  kewarganegaraan?: string;
+  berlaku_hingga?: string;
+  /** Aggregate scanning precision in [0, 1] */
+  precision_score?: number;
+  /** Per-field precision in [0, 1] */
+  field_precision?: Record<string, number>;
+  /** Which engines participated (yolo+region_ocr, easyocr, tesseract) */
+  engines_used?: string[];
+  /** Per-field winning engine */
+  field_source?: Record<string, string>;
+  /** xyxy bbox per field, in preprocessed-image coordinates */
+  field_bbox?: Record<string, [number, number, number, number]>;
+  /** Raw YOLO detections for UI overlay */
+  yolo_detections?: YoloDetection[];
+}
+
+export async function scanIdentityDocument(file: File): Promise<ScanResponse> {
   const formData = new FormData();
   formData.append('file', file);
 

@@ -23,16 +23,33 @@ export default function DisputeGenerator() {
     dateFraudKnown: '',
     nominalBilled: '',
     chronologyText: '',
+    // ── Core identity (KTP) ──
     nik: '',
     fullname: '',
     documentType: '',
     dob: '',
-    alamat: '',
+    tempatLahir: '',
     jenisKelamin: 'Laki-laki',
+    golDarah: '',
+    // ── Address (KTP) ──
+    alamat: '',
+    rtRw: '',
+    kelurahan: '',
+    kecamatan: '',
+    // ── Demographics (KTP) ──
+    agama: '',
+    statusPerkawinan: '',
+    pekerjaan: '',
+    kewarganegaraan: '',
+    berlakuHingga: '',
+    // ── Contact (user-provided) ──
     noHandphone: '',
     email: '',
     evidenceFiles: [] as File[]
   });
+  const [scanPrecision, setScanPrecision] = useState<number | null>(null);
+  const [autoFilledFields, setAutoFilledFields] = useState<string[]>([]);
+  const [scanEngines, setScanEngines] = useState<string[]>([]);
 
   const handleNext = () => {
     // Perform Strict NIK step validation here if moving away from step 3 to step 4
@@ -122,16 +139,39 @@ export default function DisputeGenerator() {
     setScanError('');
     try {
       const result = await scanIdentityDocument(file);
-      // Auto-fill from Secure Scanning Backend
+      // Auto-fill *every* KTP field the scanner extracted. Empty strings
+      // are kept so the user can fill them manually without our defaults
+      // overriding fresh input on the next scan.
+      const filled: Record<string, string> = {};
+      const trackFill = (formKey: string, scanned?: string) => {
+        if (scanned && scanned.trim()) {
+          filled[formKey] = scanned.trim();
+        }
+      };
+      trackFill('nik',              result.nik);
+      trackFill('fullname',         result.full_name);
+      trackFill('dob',              result.date_of_birth);
+      trackFill('tempatLahir',      result.tempat_lahir);
+      trackFill('jenisKelamin',     result.jenis_kelamin);
+      trackFill('golDarah',         result.gol_darah);
+      trackFill('alamat',           result.alamat);
+      trackFill('rtRw',             result.rt_rw);
+      trackFill('kelurahan',        result.kelurahan);
+      trackFill('kecamatan',        result.kecamatan);
+      trackFill('agama',            result.agama);
+      trackFill('statusPerkawinan', result.status_perkawinan);
+      trackFill('pekerjaan',        result.pekerjaan);
+      trackFill('kewarganegaraan',  result.kewarganegaraan);
+      trackFill('berlakuHingga',    result.berlaku_hingga);
+
       setFormData({
         ...formData,
-        nik: result.nik || '',
-        fullname: result.full_name || '',
-        dob: result.date_of_birth || '',
+        ...filled,
         documentType: result.document_type || 'KTP',
-        alamat: result.alamat || '',
-        jenisKelamin: result.jenis_kelamin || 'Laki-laki'
       });
+      setAutoFilledFields(Object.keys(filled));
+      setScanEngines(result.engines_used || []);
+      setScanPrecision(typeof result.precision_score === 'number' ? result.precision_score : null);
     } catch (err: any) {
       setScanError(err.message || 'Error occurred during secure scanning');
     } finally {
@@ -153,8 +193,18 @@ export default function DisputeGenerator() {
         nik: formData.nik,
         full_name: formData.fullname,
         date_of_birth: formData.dob,
-        alamat: formData.alamat,
+        tempat_lahir: formData.tempatLahir || undefined,
         jenis_kelamin: formData.jenisKelamin,
+        gol_darah: formData.golDarah || undefined,
+        alamat: formData.alamat,
+        rt_rw: formData.rtRw || undefined,
+        kelurahan: formData.kelurahan || undefined,
+        kecamatan: formData.kecamatan || undefined,
+        agama: formData.agama || undefined,
+        status_perkawinan: formData.statusPerkawinan || undefined,
+        pekerjaan: formData.pekerjaan || undefined,
+        kewarganegaraan: formData.kewarganegaraan || undefined,
+        berlaku_hingga: formData.berlakuHingga || undefined,
       });
 
       const certId = 'CERT-' + String(backendResponse.id).padStart(6, '0');
@@ -265,6 +315,39 @@ export default function DisputeGenerator() {
                 )}
               </div>
 
+              {scanPrecision !== null && (
+                <div className="precision-badge" role="status" aria-live="polite">
+                  <span className="precision-label">Precision Scan</span>
+                  <div className="precision-bar">
+                    <span
+                      className="precision-fill"
+                      style={{
+                        width: `${Math.round(scanPrecision * 100)}%`,
+                        background:
+                          scanPrecision >= 0.8
+                            ? 'var(--accent-green)'
+                            : scanPrecision >= 0.55
+                            ? 'var(--accent-cyan)'
+                            : 'var(--accent-amber)',
+                      }}
+                    />
+                  </div>
+                  <span className="precision-value">{(scanPrecision * 100).toFixed(1)}%</span>
+                </div>
+              )}
+
+              {autoFilledFields.length > 0 && (
+                <div className="autofill-banner" role="status" aria-live="polite">
+                  <span className="autofill-dot" />
+                  <span>
+                    <strong>{autoFilledFields.length} field</strong> terisi otomatis dari KTP
+                    {scanEngines.length > 0 && (
+                      <small> · {scanEngines.join(' + ')}</small>
+                    )}
+                  </span>
+                </div>
+              )}
+
               {scanError && (
                 <div style={{ background: 'rgba(248,113,113,0.1)', border: '1px solid rgba(248,113,113,0.4)', borderRadius: '8px', padding: '0.75rem 1rem', marginBottom: '1.25rem', color: '#f87171', fontSize: '0.83rem' }}>
                   {scanError}
@@ -287,7 +370,7 @@ export default function DisputeGenerator() {
 
                 {/* Full Name */}
                 <div className="form-row">
-                  <label className="form-label form-label-required">Nama Lengkap (Sesuai KTP)</label>
+                  <label className={`form-label form-label-required ${autoFilledFields.includes('fullname') ? 'form-label-autofilled' : ''}`}>Nama Lengkap (Sesuai KTP)</label>
                   <input
                     type="text" name="fullname" value={formData.fullname}
                     onChange={handleChange} className="form-input"
@@ -300,7 +383,7 @@ export default function DisputeGenerator() {
                 {/* NIK + Tanggal Lahir — side by side on wider screens */}
                 <div className="form-grid-2">
                   <div className="form-row">
-                    <label className="form-label form-label-required">NIK</label>
+                    <label className={`form-label form-label-required ${autoFilledFields.includes('nik') ? 'form-label-autofilled' : ''}`}>NIK</label>
                     <input
                       type="text" inputMode="numeric" name="nik" value={formData.nik}
                       onChange={handleChange} className="form-input"
@@ -313,7 +396,7 @@ export default function DisputeGenerator() {
                   </div>
 
                   <div className="form-row">
-                    <label className="form-label form-label-required">Tanggal Lahir</label>
+                    <label className={`form-label form-label-required ${autoFilledFields.includes('dob') ? 'form-label-autofilled' : ''}`}>Tanggal Lahir</label>
                     <div className="form-input-wrap">
                       <input
                         type="text" inputMode="numeric" name="dob" value={formData.dob}
@@ -333,20 +416,128 @@ export default function DisputeGenerator() {
 
                 {/* Jenis Kelamin */}
                 <div className="form-row">
-                  <label className="form-label">Jenis Kelamin</label>
+                  <label className={`form-label ${autoFilledFields.includes('jenisKelamin') ? 'form-label-autofilled' : ''}`}>Jenis Kelamin</label>
                   <select name="jenisKelamin" value={formData.jenisKelamin} onChange={handleChange} className="form-input">
                     <option value="Laki-laki">Laki-laki</option>
                     <option value="Perempuan">Perempuan</option>
                   </select>
                 </div>
 
+                {/* Tempat Lahir + Gol Darah */}
+                <div className="form-grid-2">
+                  <div className="form-row">
+                    <label className={`form-label ${autoFilledFields.includes('tempatLahir') ? 'form-label-autofilled' : ''}`}>Tempat Lahir</label>
+                    <input
+                      type="text" name="tempatLahir" value={formData.tempatLahir}
+                      onChange={handleChange} className="form-input"
+                      maxLength={50} placeholder="JAKARTA"
+                    />
+                  </div>
+                  <div className="form-row">
+                    <label className={`form-label ${autoFilledFields.includes('golDarah') ? 'form-label-autofilled' : ''}`}>Gol. Darah</label>
+                    <select name="golDarah" value={formData.golDarah} onChange={handleChange} className="form-input">
+                      <option value="">— Pilih —</option>
+                      <option value="A">A</option>
+                      <option value="B">B</option>
+                      <option value="AB">AB</option>
+                      <option value="O">O</option>
+                      <option value="-">-</option>
+                    </select>
+                  </div>
+                </div>
+
                 {/* Alamat */}
                 <div className="form-row">
-                  <label className="form-label">Alamat Lengkap</label>
+                  <label className={`form-label ${autoFilledFields.includes('alamat') ? 'form-label-autofilled' : ''}`}>Alamat Lengkap</label>
                   <textarea
                     name="alamat" value={formData.alamat}
                     onChange={handleChange} className="form-input"
                     rows={2} placeholder="Sesuai KTP..."
+                  />
+                </div>
+
+                {/* RT/RW + Kelurahan + Kecamatan */}
+                <div className="form-grid-2">
+                  <div className="form-row">
+                    <label className={`form-label ${autoFilledFields.includes('rtRw') ? 'form-label-autofilled' : ''}`}>RT/RW</label>
+                    <input
+                      type="text" name="rtRw" value={formData.rtRw}
+                      onChange={handleChange} className="form-input"
+                      maxLength={8} placeholder="001/002"
+                      style={{ fontFamily: 'monospace', letterSpacing: '0.04em' }}
+                    />
+                  </div>
+                  <div className="form-row">
+                    <label className={`form-label ${autoFilledFields.includes('kelurahan') ? 'form-label-autofilled' : ''}`}>Kelurahan / Desa</label>
+                    <input
+                      type="text" name="kelurahan" value={formData.kelurahan}
+                      onChange={handleChange} className="form-input"
+                      maxLength={50} placeholder="Sesuai KTP"
+                    />
+                  </div>
+                </div>
+                <div className="form-row">
+                  <label className={`form-label ${autoFilledFields.includes('kecamatan') ? 'form-label-autofilled' : ''}`}>Kecamatan</label>
+                  <input
+                    type="text" name="kecamatan" value={formData.kecamatan}
+                    onChange={handleChange} className="form-input"
+                    maxLength={50} placeholder="Sesuai KTP"
+                  />
+                </div>
+
+                {/* Agama + Status Perkawinan */}
+                <div className="form-grid-2">
+                  <div className="form-row">
+                    <label className={`form-label ${autoFilledFields.includes('agama') ? 'form-label-autofilled' : ''}`}>Agama</label>
+                    <select name="agama" value={formData.agama} onChange={handleChange} className="form-input">
+                      <option value="">— Pilih —</option>
+                      <option value="Islam">Islam</option>
+                      <option value="Kristen">Kristen</option>
+                      <option value="Katolik">Katolik</option>
+                      <option value="Hindu">Hindu</option>
+                      <option value="Buddha">Buddha</option>
+                      <option value="Konghucu">Konghucu</option>
+                    </select>
+                  </div>
+                  <div className="form-row">
+                    <label className={`form-label ${autoFilledFields.includes('statusPerkawinan') ? 'form-label-autofilled' : ''}`}>Status Perkawinan</label>
+                    <select name="statusPerkawinan" value={formData.statusPerkawinan} onChange={handleChange} className="form-input">
+                      <option value="">— Pilih —</option>
+                      <option value="Belum Kawin">Belum Kawin</option>
+                      <option value="Kawin">Kawin</option>
+                      <option value="Cerai Hidup">Cerai Hidup</option>
+                      <option value="Cerai Mati">Cerai Mati</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Pekerjaan + Kewarganegaraan */}
+                <div className="form-grid-2">
+                  <div className="form-row">
+                    <label className={`form-label ${autoFilledFields.includes('pekerjaan') ? 'form-label-autofilled' : ''}`}>Pekerjaan</label>
+                    <input
+                      type="text" name="pekerjaan" value={formData.pekerjaan}
+                      onChange={handleChange} className="form-input"
+                      maxLength={50} placeholder="Karyawan Swasta"
+                    />
+                  </div>
+                  <div className="form-row">
+                    <label className={`form-label ${autoFilledFields.includes('kewarganegaraan') ? 'form-label-autofilled' : ''}`}>Kewarganegaraan</label>
+                    <input
+                      type="text" name="kewarganegaraan" value={formData.kewarganegaraan}
+                      onChange={handleChange} className="form-input"
+                      maxLength={10} placeholder="WNI"
+                    />
+                  </div>
+                </div>
+
+                {/* Berlaku Hingga */}
+                <div className="form-row">
+                  <label className={`form-label ${autoFilledFields.includes('berlakuHingga') ? 'form-label-autofilled' : ''}`}>Berlaku Hingga</label>
+                  <input
+                    type="text" name="berlakuHingga" value={formData.berlakuHingga}
+                    onChange={handleChange} className="form-input"
+                    maxLength={20} placeholder="SEUMUR HIDUP"
                   />
                 </div>
 

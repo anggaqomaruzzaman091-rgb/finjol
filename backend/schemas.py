@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, Dict, List, Any
 from datetime import datetime
 
 
@@ -20,6 +20,16 @@ class ScanResult(BaseModel):
     pekerjaan: Optional[str] = None
     kewarganegaraan: Optional[str] = None
     berlaku_hingga: Optional[str] = None
+    # Precision data: aggregate score + per-field confidence (both in [0,1])
+    precision_score: Optional[float] = None
+    field_precision: Optional[Dict[str, float]] = None
+    # Which engine(s) contributed — diagnostic for dual-engine merge
+    engines_used: Optional[List[str]] = None
+    field_source: Optional[Dict[str, str]] = None
+    # YOLO region detection: bbox per field (xyxy in cropped-image coords)
+    field_bbox: Optional[Dict[str, List[int]]] = None
+    # Raw YOLO detections for inspection / UI overlay
+    yolo_detections: Optional[List[Dict[str, Any]]] = None
 
 
 class VerifyRequest(BaseModel):

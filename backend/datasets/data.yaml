@@ -1,0 +1,7 @@
+# Auto-generated for KTP-card detector (single class).
+train: ./train/images
+val:   ./valid/images
+test:  ./test/images
+nc: 1
+names:
+  - ktp

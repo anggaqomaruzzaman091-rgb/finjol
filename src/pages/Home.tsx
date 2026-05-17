@@ -48,26 +48,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Trust bar (horizon divider) ───────────────────────────────── */}
-      <div className="trust-bar">
-        <div className="trust-item">
-          <span className="trust-dot"></span>
-          <span>Selesai dalam <strong>3 menit</strong></span>
-        </div>
-        <div className="trust-item">
-          <span className="trust-dot" style={{ background: 'var(--accent-green)' }}></span>
-          <span>Arsitektur <strong>Zero-Trust</strong></span>
-        </div>
-        <div className="trust-item">
-          <span className="trust-dot" style={{ background: '#a78bfa' }}></span>
-          <span><strong>Open Source</strong> &amp; Gratis</span>
-        </div>
-        <div className="trust-item">
-          <span className="trust-dot" style={{ background: '#fbbf24' }}></span>
-          <span>Enkripsi <strong>AES-256</strong></span>
-        </div>
-      </div>
-
       {/* ── Features ─────────────────────────────────────────────────── */}
       <section id="features" className="section section-alt">
         <div className="vector-bg">

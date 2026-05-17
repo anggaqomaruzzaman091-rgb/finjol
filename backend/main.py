@@ -9,37 +9,48 @@ from datetime import timedelta
 from typing import List
 from bson import ObjectId
 from dotenv import load_dotenv
+from contextlib import asynccontextmanager
 import re
 import os
 
-import models
-import schemas
-import database
-import auth
-import deps
-import encryption
-import ocr_service
+import models  # type: ignore
+import schemas  # type: ignore
+import database  # type: ignore
+import auth  # type: ignore
+import deps  # type: ignore
+import encryption  # type: ignore
+import ocr_service  # type: ignore
 
 load_dotenv()
 
 ALLOWED_ORIGINS = [o.strip() for o in os.getenv("ALLOWED_ORIGINS", "http://localhost:5173").split(",")]
 
-# ---------------------------------------------------------------------------
-# Rate limiter
-# ---------------------------------------------------------------------------
+
 limiter = Limiter(key_func=get_remote_address)
+
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await database.create_indexes()
+    # Warm up the OCR model so the first /scan request isn't slow.
+    # Failures are non-fatal (the model lazy-loads on first call anyway).
+    try:
+        await ocr_service.warmup_reader()
+    except Exception:
+        pass
+    yield
 
 app = FastAPI(
     title="FindJol KTP Identity API",
     docs_url=None,       # disable Swagger in prod
     redoc_url=None,
+    lifespan=lifespan,
 )
 app.state.limiter = limiter
-app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)  # type: ignore
 
-# ---------------------------------------------------------------------------
-# Security headers middleware
-# ---------------------------------------------------------------------------
+
 @app.middleware("http")
 async def add_security_headers(request: Request, call_next):
     response = await call_next(request)
@@ -50,9 +61,7 @@ async def add_security_headers(request: Request, call_next):
     response.headers["Permissions-Policy"] = "geolocation=(), microphone=()"
     return response
 
-# ---------------------------------------------------------------------------
-# CORS — only specific origins from env
-# ---------------------------------------------------------------------------
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
@@ -62,14 +71,7 @@ app.add_middleware(
 )
 
 
-@app.on_event("startup")
-async def startup():
-    await database.create_indexes()
 
-
-# ---------------------------------------------------------------------------
-# Input validation helpers
-# ---------------------------------------------------------------------------
 USERNAME_RE = re.compile(r'^[a-zA-Z0-9_\-]{3,50}$')
 PASSWORD_MIN = 8
 
@@ -87,9 +89,7 @@ def validate_password(password: str):
             detail=f"Password must be at least {PASSWORD_MIN} characters.",
         )
 
-# ---------------------------------------------------------------------------
-# Magic-byte image validation (prevent MIME spoofing)
-# ---------------------------------------------------------------------------
+
 IMAGE_SIGNATURES = [
     b'\xff\xd8\xff',        # JPEG
     b'\x89PNG\r\n\x1a\n',  # PNG
@@ -105,9 +105,7 @@ def validate_image_bytes(data: bytes):
     raise HTTPException(status_code=400, detail="File is not a valid image.")
 
 
-# ---------------------------------------------------------------------------
-# Auth
-# ---------------------------------------------------------------------------
+
 
 @app.post("/api/v1/auth/token", response_model=schemas.Token)
 @limiter.limit("10/minute")
@@ -126,9 +124,7 @@ async def login_for_access_token(request: Request, form_data: OAuth2PasswordRequ
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-# ---------------------------------------------------------------------------
-# Users
-# ---------------------------------------------------------------------------
+
 
 @app.post("/api/v1/users", response_model=schemas.UserInDB)
 @limiter.limit("5/minute")
@@ -151,9 +147,7 @@ async def create_user(request: Request, user: schemas.UserCreate):
     )
 
 
-# ---------------------------------------------------------------------------
-# KTP Scan
-# ---------------------------------------------------------------------------
+
 
 @app.post("/api/v1/identity/scan", response_model=schemas.ScanResult)
 @limiter.limit("20/minute")
@@ -171,13 +165,14 @@ async def scan_ktp(
     # Magic-byte validation — don't trust client MIME
     validate_image_bytes(contents)
 
-    result = await ocr_service.process_document_image(contents, file.filename)
-    return result
+    try:
+        result = await ocr_service.process_document_image(contents, file.filename or "upload.png")
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Gagal memproses gambar identitas: {str(e)}")
 
 
-# ---------------------------------------------------------------------------
-# Verify & Save
-# ---------------------------------------------------------------------------
+
 
 @app.post("/api/v1/identity/verify", response_model=schemas.IdentityRecordResponse)
 @limiter.limit("10/minute")
@@ -220,9 +215,7 @@ async def verify_and_save_identity(
     )
 
 
-# ---------------------------------------------------------------------------
-# Get my saved identities
-# ---------------------------------------------------------------------------
+
 
 @app.get("/api/v1/identity/me", response_model=List[schemas.IdentityRecordResponse])
 @limiter.limit("30/minute")

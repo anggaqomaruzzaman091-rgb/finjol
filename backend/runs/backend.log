@@ -1,0 +1,88 @@
+INFO:     Started server process [18124]
+INFO:     Waiting for application startup.
+ERROR:    Traceback (most recent call last):
+  File "C:\Users\lenovo\Desktop\Prod-desc\backend\venv\Lib\site-packages\starlette\routing.py", line 638, in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+               ~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python313\Lib\contextlib.py", line 214, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\lenovo\Desktop\Prod-desc\backend\main.py", line 35, in lifespan
+    await database.create_indexes()
+  File "C:\Users\lenovo\Desktop\Prod-desc\backend\database.py", line 19, in create_indexes
+    await users_collection.create_index("username", unique=True)
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python313\Lib\concurrent\futures\thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "C:\Users\lenovo\Desktop\Prod-desc\backend\venv\Lib\site-packages\pymongo\synchronous\collection.py", line 2391, in create_index
+    return (self._create_indexes([index], session, **cmd_options))[0]
+            ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\lenovo\Desktop\Prod-desc\backend\venv\Lib\site-packages\pymongo\_csot.py", line 125, in csot_wrapper
+    return func(self, *args, **kwargs)
+  File "C:\Users\lenovo\Desktop\Prod-desc\backend\venv\Lib\site-packages\pymongo\synchronous\collection.py", line 2273, in _create_indexes
+    return self.database.client._retryable_write(False, inner, session, _Op.CREATE_INDEXES)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\lenovo\Desktop\Prod-desc\backend\venv\Lib\site-packages\pymongo\synchronous\mongo_client.py", line 2113, in _retryable_write
+    return self._retry_with_session(retryable, func, s, bulk, operation, operation_id)
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\lenovo\Desktop\Prod-desc\backend\venv\Lib\site-packages\pymongo\synchronous\mongo_client.py", line 1986, in _retry_with_session
+    return self._retry_internal(
+           ~~~~~~~~~~~~~~~~~~~~^
+        func=func,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        operation_id=operation_id,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\lenovo\Desktop\Prod-desc\backend\venv\Lib\site-packages\pymongo\_csot.py", line 125, in csot_wrapper
+    return func(self, *args, **kwargs)
+  File "C:\Users\lenovo\Desktop\Prod-desc\backend\venv\Lib\site-packages\pymongo\synchronous\mongo_client.py", line 2038, in _retry_internal
+    ).run()
+      ~~~^^
+  File "C:\Users\lenovo\Desktop\Prod-desc\backend\venv\Lib\site-packages\pymongo\synchronous\mongo_client.py", line 2811, in run
+    res = self._read() if self._is_read else self._write()
+                                             ~~~~~~~~~~~^^
+  File "C:\Users\lenovo\Desktop\Prod-desc\backend\venv\Lib\site-packages\pymongo\synchronous\mongo_client.py", line 2992, in _write
+    self._server = self._get_server()
+                   ~~~~~~~~~~~~~~~~^^
+  File "C:\Users\lenovo\Desktop\Prod-desc\backend\venv\Lib\site-packages\pymongo\synchronous\mongo_client.py", line 2975, in _get_server
+    return self._client._select_server(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self._server_selector,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+        operation_id=self._operation_id,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\lenovo\Desktop\Prod-desc\backend\venv\Lib\site-packages\pymongo\synchronous\mongo_client.py", line 1851, in _select_server
+    server = topology.select_server(
+        server_selector,
+    ...<2 lines>...
+        operation_id=operation_id,
+    )
+  File "C:\Users\lenovo\Desktop\Prod-desc\backend\venv\Lib\site-packages\pymongo\synchronous\topology.py", line 428, in select_server
+    server = self._select_server(
+        selector,
+    ...<4 lines>...
+        operation_id=operation_id,
+    )
+  File "C:\Users\lenovo\Desktop\Prod-desc\backend\venv\Lib\site-packages\pymongo\synchronous\topology.py", line 402, in _select_server
+    servers = self.select_servers(
+        selector,
+    ...<4 lines>...
+        deprioritized_servers,
+    )
+  File "C:\Users\lenovo\Desktop\Prod-desc\backend\venv\Lib\site-packages\pymongo\synchronous\topology.py", line 298, in select_servers
+    server_descriptions = self._select_servers_loop(
+        selector,
+    ...<4 lines>...
+        deprioritized_servers=deprioritized_servers,
+    )
+  File "C:\Users\lenovo\Desktop\Prod-desc\backend\venv\Lib\site-packages\pymongo\synchronous\topology.py", line 359, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+        f"{self._error_message(selector)}, Timeout: {timeout}s, Topology Description: {self.description!r}"
+    )
+pymongo.errors.ServerSelectionTimeoutError: SSL handshake failed: ac-zxtnpqq-shard-00-01.nkp23dv.mongodb.net:27017: [SSL: TLSV1_ALERT_INTERNAL_ERROR] tlsv1 alert internal error (_ssl.c:1032) (configured timeouts: socketTimeoutMS: 20000.0ms, connectTimeoutMS: 20000.0ms),SSL handshake failed: ac-zxtnpqq-shard-00-02.nkp23dv.mongodb.net:27017: [SSL: TLSV1_ALERT_INTERNAL_ERROR] tlsv1 alert internal error (_ssl.c:1032) (configured timeouts: socketTimeoutMS: 20000.0ms, connectTimeoutMS: 20000.0ms),SSL handshake failed: ac-zxtnpqq-shard-00-00.nkp23dv.mongodb.net:27017: [SSL: TLSV1_ALERT_INTERNAL_ERROR] tlsv1 alert internal error (_ssl.c:1032) (configured timeouts: socketTimeoutMS: 20000.0ms, connectTimeoutMS: 20000.0ms), Timeout: 30s, Topology Description: <TopologyDescription id: 6a045adf1fc7c7f439a1cbd4, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('ac-zxtnpqq-shard-00-00.nkp23dv.mongodb.net', 27017) server_type: Unknown, rtt: None, error=AutoReconnect('SSL handshake failed: ac-zxtnpqq-shard-00-00.nkp23dv.mongodb.net:27017: [SSL: TLSV1_ALERT_INTERNAL_ERROR] tlsv1 alert internal error (_ssl.c:1032) (configured timeouts: socketTimeoutMS: 20000.0ms, connectTimeoutMS: 20000.0ms)')>, <ServerDescription ('ac-zxtnpqq-shard-00-01.nkp23dv.mongodb.net', 27017) server_type: Unknown, rtt: None, error=AutoReconnect('SSL handshake failed: ac-zxtnpqq-shard-00-01.nkp23dv.mongodb.net:27017: [SSL: TLSV1_ALERT_INTERNAL_ERROR] tlsv1 alert internal error (_ssl.c:1032) (configured timeouts: socketTimeoutMS: 20000.0ms, connectTimeoutMS: 20000.0ms)')>, <ServerDescription ('ac-zxtnpqq-shard-00-02.nkp23dv.mongodb.net', 27017) server_type: Unknown, rtt: None, error=AutoReconnect('SSL handshake failed: ac-zxtnpqq-shard-00-02.nkp23dv.mongodb.net:27017: [SSL: TLSV1_ALERT_INTERNAL_ERROR] tlsv1 alert internal error (_ssl.c:1032) (configured timeouts: socketTimeoutMS: 20000.0ms, connectTimeoutMS: 20000.0ms)')>]>
+
+ERROR:    Application startup failed. Exiting.

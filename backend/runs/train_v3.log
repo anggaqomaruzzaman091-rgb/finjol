@@ -1,0 +1,17 @@
+
+[train_ktp_yolo] No KTP_DATASET found and no --roboflow-key / ROBOFLOW_API_KEY provided.
+
+Provide a YOLOv8-format KTP dataset and re-run, e.g.:
+    set KTP_DATASET=C:\path\to\ktp-dataset
+    backend\venv\Scripts\python.exe backend\scripts\train_ktp_yolo.py
+
+Expected layout:
+    <KTP_DATASET>/data.yaml
+    <KTP_DATASET>/train/images/*.jpg
+    <KTP_DATASET>/train/labels/*.txt
+    <KTP_DATASET>/valid/images/*.jpg
+    <KTP_DATASET>/valid/labels/*.txt
+
+Easiest source: Roboflow Universe \u2192 search 'KTP Indonesia',
+click Export, choose 'YOLOv8' format, and unzip locally.
+

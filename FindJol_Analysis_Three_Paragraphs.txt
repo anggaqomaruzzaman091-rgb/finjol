@@ -1,0 +1,17 @@
+======================================================
+ANALYZING FINDJOL — A THREE-PARAGRAPH REVIEW
+(Written in Present Continuous Tense)
+Covers: Basic Info, Problem, Features, and Benefits
+======================================================
+
+
+PARAGRAPH 1 — BASIC INFO & PROBLEM
+FindJol is operating as an offline-first cybersecurity web platform that is serving Indonesian citizens whose identities are being misused by illegal online lenders (Pinjol Ilegal). The product is addressing a serious problem that is currently affecting thousands of innocent people: criminals are stealing KTP data and are using it to register fake loans, which is causing victims to receive negative BI-Checking/SLIK records. As a result, many job seekers are losing employment opportunities, and most citizens are struggling because the official OJK dispute process is requiring strict legal formatting that ordinary people are not understanding.
+
+
+PARAGRAPH 2 — FEATURES
+The platform is offering three core features that are working together to solve this issue. First, it is providing an Automated OJK Dispute Generator, which is guiding users through a simple 3-step wizard and is producing a print-ready formal complaint that is following Indonesian bureaucratic standards. Second, it is running a Secure Local AI Identity Scanner built on PyTorch and OpenCV, which is scanning the user's KTP and is extracting the NIK, name, gender, and address directly on the device — meaning no data is being uploaded to any cloud server. Third, it is delivering a cyber-themed accessible UI with light and dark modes, which is reducing user anxiety while they are dealing with stressful fraud situations.
+
+
+PARAGRAPH 3 — BENEFITS
+FindJol is delivering meaningful benefits that are going far beyond convenience. It is saving victims hours of confusing paperwork by turning them into organized plaintiffs in under three minutes, and it is protecting their privacy through Zero-Trust local scanning that is keeping sensitive identity data away from third-party servers. The platform is also empowering legal advocates and NGOs by allowing them to mass-generate takedown requests efficiently, and it is democratizing financial justice for users who are otherwise being excluded by complex bureaucracy. Overall, FindJol is proving that smart automation and strong privacy are working hand in hand to defend ordinary citizens against digital identity fraud.

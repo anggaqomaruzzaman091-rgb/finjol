@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 def user_document(username: str, hashed_password: str) -> dict:
@@ -31,5 +31,5 @@ def identity_record_document(user_id: str, req) -> dict:
         "pekerjaan":          req.pekerjaan or "",
         "kewarganegaraan":    req.kewarganegaraan or "",
         "berlaku_hingga":     req.berlaku_hingga or "",
-        "created_at":         datetime.utcnow(),
+        "created_at":         datetime.now(timezone.utc),
     }

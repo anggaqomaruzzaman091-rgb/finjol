@@ -79,7 +79,7 @@
 
 /* Hero Section */
 .hero {
-  padding: 12rem 0 6rem;
+  padding: 12rem 0 rem;
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -284,7 +284,7 @@
 .accent-divider {
   width: 60px;
   height: 4px;
-  background: linear-(90deg, var(--accent-cyan), #072f6e);
+  background: linear-gradient(90deg, var(--accent-cyan), #072f6e);
   margin: 0 auto 2rem;
   border-radius: 4px;
 }
@@ -499,7 +499,7 @@
 
 .erd-placeholder img {
   max-width: 100%;
-  height: auto;
+  height: 150px;
   border-radius: 8px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
@@ -515,7 +515,7 @@
 
 .footer-logo {
   font-family: var(--font-heading);
-  font-size: 1.5rem;
+  font-size: 20px;
   color: var(--text-main);
   margin-bottom: 1rem;
 }
@@ -721,5 +721,259 @@
       left: -4px;
       opacity: 0;
     }
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Camera capture component
+   ──────────────────────────────────────────────────────────── */
+
+.camera-shell {
+  position: relative;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  aspect-ratio: 4 / 3;
+  background: #000;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.camera-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.camera-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* KTP-aspect reticle (85.6 × 53.98 mm ≈ 1.586:1).
+   86% of container width matches the analyzer's expectations. */
+.camera-reticle {
+  position: relative;
+  width: 86%;
+  aspect-ratio: 8.56 / 5.398;
+  max-height: 70%;
+  border: 1px dashed rgba(255, 255, 255, 0.35);
+  border-radius: 10px;
+  transition: border-color 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
+}
+
+.reticle-dark {
+  border-color: rgba(248, 113, 113, 0.55);
+}
+
+.reticle-empty {
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.reticle-misaligned {
+  border-color: rgba(251, 191, 36, 0.75);
+  box-shadow: 0 0 0 1px rgba(251, 191, 36, 0.25);
+}
+
+.reticle-aligned {
+  border-color: rgba(74, 222, 128, 0.95);
+  box-shadow: 0 0 0 2px rgba(74, 222, 128, 0.25);
+}
+
+.camera-reticle .corner {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #fff;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+}
+
+.camera-reticle .corner.tl {
+  top: -2px;
+  left: -2px;
+  border-right: none;
+  border-bottom: none;
+  border-top-left-radius: 6px;
+}
+
+.camera-reticle .corner.tr {
+  top: -2px;
+  right: -2px;
+  border-left: none;
+  border-bottom: none;
+  border-top-right-radius: 6px;
+}
+
+.camera-reticle .corner.bl {
+  bottom: -2px;
+  left: -2px;
+  border-right: none;
+  border-top: none;
+  border-bottom-left-radius: 6px;
+}
+
+.camera-reticle .corner.br {
+  bottom: -2px;
+  right: -2px;
+  border-left: none;
+  border-top: none;
+  border-bottom-right-radius: 6px;
+}
+
+.reticle-aligned .corner {
+  border-color: var(--accent-green);
+}
+
+.reticle-misaligned .corner {
+  border-color: var(--accent-amber);
+}
+
+.reticle-dark .corner {
+  border-color: var(--accent-red);
+}
+
+.reticle-progress {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--accent-green);
+  transform-origin: left center;
+  border-radius: 0 0 6px 6px;
+  transition: transform 80ms linear;
+}
+
+.camera-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 6px 12px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: 999px;
+  white-space: nowrap;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  backdrop-filter: blur(4px);
+}
+
+.camera-hint small {
+  font-size: 0.66rem;
+  opacity: 0.7;
+  font-weight: 400;
+}
+
+.hint-warn {
+  color: var(--accent-amber);
+}
+
+.hint-ok {
+  color: var(--accent-green);
+}
+
+.hint-neutral {
+  color: #fff;
+}
+
+.camera-controls {
+  position: absolute;
+  left: 50%;
+  bottom: 56px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  pointer-events: auto;
+}
+
+.camera-iconbtn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 120ms var(--ease-out), border-color 120ms var(--ease-out);
+}
+
+.camera-iconbtn:hover {
+  background: rgba(0, 0, 0, 0.75);
+  border-color: var(--accent-cyan);
+}
+
+.camera-capture-btn {
+  padding: 0.5rem 1rem;
+  font-size: 0.83rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.camera-autoswitch {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  font-size: 0.72rem;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: 999px;
+  cursor: pointer;
+  user-select: none;
+  pointer-events: auto;
+  backdrop-filter: blur(4px);
+}
+
+.camera-autoswitch input {
+  accent-color: var(--accent-cyan);
+  cursor: pointer;
+}
+
+.camera-error {
+  padding: 1.25rem;
+  color: var(--accent-red);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+@media (max-width: 480px) {
+  .camera-shell {
+    max-width: 100%;
+    aspect-ratio: 3 / 4;
+  }
+
+  .camera-controls {
+    bottom: 64px;
+    gap: 10px;
+  }
+
+  .camera-iconbtn {
+    width: 36px;
+    height: 36px;
   }
 }
